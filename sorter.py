@@ -9,18 +9,85 @@ def read_information():
     dir = [d for d in os.listdir(os.curdir) if os.path.isdir(d)]
     return(files, dir)
 
-#!sort the files to the corresponding folder
-def sorti(name, subfolder, files):
+def sorte(name, path, subfolder, files):
+    new_dir = path
     for i in files:
         _new = i.split(".")
         if len(_new) == 2:
             dir = re.split('(\d+)',_new[0])
+            if name in dir[len(dir)-1]:
+                if _new[len(_new)-1].lower() == "csv":
+                    if "APPROVED" in i:
+                        sub_dir = subfolder["APPROVED"]
+                        path_old = os.curdir+"//"+i
+                        path_new = os.curdir+"//"+new_dir+"//"+sub_dir+"//"+i
+                        change_folder(path_old, path_new)
+                    else:
+                        sub_dir = subfolder["KRONOS"]
+                        path_old = os.curdir+"//"+i
+                        path_new = os.curdir+"//"+new_dir+"//"+sub_dir+"//"+i
+                        change_folder(path_old, path_new)
+                elif _new[len(_new)-1].lower() == "db":
+                        sub_dir = subfolder["DB"]
+                        path_old = os.curdir+"//"+i
+                        path_new = os.curdir+"//"+new_dir+"//"+sub_dir+"//"+i
+                        change_folder(path_old, path_new)
+                elif _new[len(_new)-1].lower() == "gsi":
+                        sub_dir = subfolder["GSI"]
+                        path_old = os.curdir+"//"+i
+                        path_new = os.curdir+"//"+new_dir+"//"+sub_dir+"//"+i
+                        change_folder(path_old, path_new)
+                
+                elif _new[len(_new)-1].lower() == "dat" or _new[len(_new)-1].lower() == "asc" or _new[len(_new)-1].lower() == "txt":
+                        sub_dir = subfolder["DETAILS"]
+                        path_old = os.curdir+"//"+i
+                        path_new = os.curdir+"//"+new_dir+"//"+sub_dir+"//"+i
+                        change_folder(path_old, path_new)
+
+        elif len(_new) == 3:
+            dir = re.split('(\d+)',_new[1])
+            if name in dir[len(dir)-1]: 
+                if _new[len(_new)-1].lower() == "csv":
+                    if "APPROVED" in i:
+                        sub_dir = subfolder["APPROVED"]
+                        path_old = os.curdir+"//"+i
+                        path_new = os.curdir+"//"+new_dir+"//"+sub_dir+"//"+i
+                        change_folder(path_old, path_new)
+                    else:
+                        sub_dir = subfolder["KRONOS"]
+                        path_old = os.curdir+"//"+i
+                        path_new = os.curdir+"//"+new_dir+"//"+sub_dir+"//"+i
+                        change_folder(path_old, path_new)
+                elif _new[len(_new)-1].lower() == "db":
+                        sub_dir = subfolder["DB"]
+                        path_old = os.curdir+"//"+i
+                        path_new = os.curdir+"//"+new_dir+"//"+sub_dir+"//"+i
+                        change_folder(path_old, path_new)
+                elif _new[len(_new)-1].lower() == "gsi":
+                        sub_dir = subfolder["GSI"]
+                        path_old = os.curdir+"//"+i
+                        path_new = os.curdir+"//"+new_dir+"//"+sub_dir+"//"+i
+                        change_folder(path_old, path_new)
+                
+                elif _new[len(_new)-1].lower() == "dat" or _new[len(_new)-1].lower() == "asc" or _new[len(_new)-1].lower() == "txt":
+                        sub_dir = subfolder["DETAILS"]
+                        path_old = os.curdir+"//"+i
+                        path_new = os.curdir+"//"+new_dir+"//"+sub_dir+"//"+i
+                        change_folder(path_old, path_new)
+            
+#!sort the files to the corresponding folder
+def sorti(name, subfolder, files):
+    for i in files:
+        print(i)
+        _new = i.split(".")
+        if len(_new) == 2:
+            dir = re.split('(\d+)',_new[0])
             if dir[len(dir)-1] in name:
-                new_dir = name[dir[len(dir)-1]]
+                new_dir = name
         elif len(_new) ==3:
             dir = re.split('(\d+)',_new[1])
             if dir[len(dir)-1] in name:
-                new_dir = name[dir[len(dir)-1]]
+                new_dir = name
         if _new[len(_new)-1].lower() == "csv":
             if "APPROVED" in i:
                 sub_dir = subfolder["APPROVED"]
@@ -166,9 +233,9 @@ def scan_sub_folder(path):
 if __name__ == "__main__":
     files, directory = read_information()
     name = parse_folder_name(directory)
-    file = parse_file_name(files)
+   # file = parse_file_name(files)
    # fil = file_info(files, name)
    # print(file)
     for item in name:
         sub_def = scan_sub_folder(name[item])
-        sorti(name, sub_def, files)    
+        sorte(item, name[item], sub_def, files)    
