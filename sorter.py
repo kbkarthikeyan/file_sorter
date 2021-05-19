@@ -75,7 +75,29 @@ def sort(files, dir):
             path_new = os.curdir+"//"+new_dir+"//"+FOLDER4+"//"+i
             change_folder(path_old, path_new)
 
-# check the folder name
+def parse_folder_name(_name): #read the folder names and gives back the list!.. 
+    _tmp = {}
+    for i in _name:
+        j= re.split("_| ", i) #anyother pattern add here! 
+        _tmp[(str(j[0]+"_"+j[1]))] = i
+    #print (_tmp) 
+    return _tmp           
+
+def parse_file_name(_name): #read the file names and gives back the list!.. 
+    _tmp = []
+    for i in _name:
+        _new = i.split(".") #separate the extension to find the directory name!
+        if len(_new) == 2:
+            dir = re.split('(\d+)',_new[0])
+            if dir[len(dir)-1] not in _tmp:
+                _tmp.append(dir[len(dir)-1])
+        elif len(_new) ==3:
+            dir = re.split('(\d+)',_new[1])
+            if dir[len(dir)-1] not in _tmp:
+                _tmp.append(dir[len(dir)-1])
+    return (_tmp)
+       
+
 def file_info(files, directory):
     _tmp = []
     for i in files:
@@ -89,14 +111,18 @@ def file_info(files, directory):
             if dir[len(dir)-1] not in _tmp:
                 _tmp.append(dir[len(dir)-1])
     _tmp_dir = {}
-    for i in _tmp:    
-        _t = i.lower().split("_")
-        for j in directory:
-            _u = j.lower().split("_")
-            for k in _u:
-                if k in _t[0]:
-                    _tmp_dir[i] = j
-                    break
+   # print(_tmp)
+   # print(directory)
+    #for i in _tmp:
+        
+     #   _t = i.lower().split("_")
+      #  if j in directory:
+       #     print (j)
+        #    _u = j.lower().split("_")
+         #   for k in _u:
+          #      if k in _t[0]:
+          #          _tmp_dir[i] = j
+           #         break
     return (_tmp_dir)  
 
 def associate_dir_name(directory, set):
@@ -117,7 +143,7 @@ def change_folder(path_old, path_new):
         pass
     return
     
-def check_sub_folder(path):
+def scan_sub_folder(path):
     _tmp = {}
     path_name = "./"+path+"/"
     dir = [d.name for d in os.scandir(path_name) if os.path.isdir(d)]
@@ -139,8 +165,10 @@ def check_sub_folder(path):
 
 if __name__ == "__main__":
     files, directory = read_information()
-    name = file_info(files, directory)
-    for path in directory:
-        sub_def = check_sub_folder(path)
-        #print(sub_def)
+    name = parse_folder_name(directory)
+    file = parse_file_name(files)
+   # fil = file_info(files, name)
+   # print(file)
+    for item in name:
+        sub_def = scan_sub_folder(name[item])
         sorti(name, sub_def, files)    
